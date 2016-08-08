@@ -27,13 +27,11 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 import org.joda.time.DateTime;
 import org.springframework.data.domain.Auditable;
 
 @Entity
-@Audited
+//@Audited
 @Table(name = "contact_audit")
 @NamedQueries({
 	@NamedQuery(name="ContactAudit.findAll",
@@ -132,7 +130,7 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 	}
 
 	@ManyToMany
-	@NotAudited
+	//@NotAudited
 	@JoinTable(name = "contact_hobby_detail", 
 	      joinColumns = @JoinColumn(name = "CONTACT_ID"), 
 	      inverseJoinColumns = @JoinColumn(name = "HOBBY_ID"))
@@ -145,7 +143,7 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 	}
 
 	@OneToMany(mappedBy = "contact", cascade=CascadeType.ALL, orphanRemoval=true)
-	@NotAudited
+	//@NotAudited
 	public Set<ContactTelDetail> getContactTelDetails() {
 		return this.contactTelDetails;
 	}
@@ -204,10 +202,10 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 	}
 
 	public String toString() {		
-		return "Contact - Id: " + id + ", First name: " + firstName 
-				+ ", Last name: " + lastName + ", Birthday: " + birthDate
-				+ ", Create by: " + createdBy + ", Create date: " + createdDate
-				+ ", Modified by: " + lastModifiedBy + ", Modified date: " + lastModifiedDate;
+		return "Contact - Id: " + id + "\n, First name: " + firstName 
+				+ "\n, Last name: " + lastName + "\n, Birthday: " + birthDate
+				+ "\n, Create by: " + createdBy + "\n, Create date: " + createdDate
+				+ "\n, Modified by: " + lastModifiedBy + "\n, Modified date: " + lastModifiedDate;
 	}	
 
 }
