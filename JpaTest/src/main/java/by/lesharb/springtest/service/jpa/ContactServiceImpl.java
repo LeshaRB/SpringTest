@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import by.lesharb.springtest.domain.Contact;
 import by.lesharb.springtest.service.ContactService;
 
-@Service("jpaContactService")
+@Service("contactService")
 @Repository
 @Transactional
 public class ContactServiceImpl implements ContactService {
@@ -30,6 +30,16 @@ public class ContactServiceImpl implements ContactService {
 		List<Contact> contacts = em.createNamedQuery("Contact.findAll", Contact.class).getResultList();
 		log.info("Finish findAll");
 		return contacts;
+	}
+
+	@Override
+	public List<Contact> findByFirstName(String firstName) {
+		return null;
+	}
+
+	@Override
+	public List<Contact> findByFirstNameAndLastName(String firstName, String lastName) {
+		return null;
 	}
 
 }

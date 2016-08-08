@@ -24,11 +24,22 @@ public class JpaTest {
 		ctx.load("classpath:app-context.xml");
 		ctx.refresh();
 
-		ContactService contactService = ctx.getBean("jpaContactService", ContactService.class);
+		ContactService contactService = ctx.getBean("contactService", ContactService.class);
 
 		List<Contact> contacts = contactService.findAll();
 		listContacts(contacts);
 
+		ContactService contactServiceJPA = ctx.getBean("contactServiceJPA", ContactService.class);
+		
+		List<Contact> contactsJPA = contactServiceJPA.findAll();
+		listContacts(contactsJPA);
+		
+		contactsJPA = contactServiceJPA.findByFirstName("Clarence");
+		listContacts(contactsJPA);
+
+		contactsJPA = contactServiceJPA.findByFirstNameAndLastName("Lesha", "Labotsky");
+		listContacts(contactsJPA);
+		
 		ctx.close();
 	}
 
