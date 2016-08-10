@@ -2,7 +2,7 @@ package by.lesharb.springtest.domain;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,47 +10,42 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityResult;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
-import org.joda.time.DateTime;
-import org.springframework.data.domain.Auditable;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+// Hibernate 3
+// @Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
+
+// Hibernate 5 & Java <8
+// @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+
+// Hibernate 5 & Java = 8
+//@Type(type="org.hibernate.type.LocalDateTimeType")
 
 @Entity
 @Audited
 @Table(name = "contact_audit")
-@NamedQueries({
-	@NamedQuery(name="ContactAudit.findAll",
-			    query="select c from Contact c"), 
-	@NamedQuery(name="ContactAudit.findById", 
-			    query="select distinct c from Contact c left join fetch c.contactTelDetails t left join fetch c.hobbies h where c.id = :id"),
-	@NamedQuery(name="ContactAudit.findAllWithDetail", 
-                query="select distinct c from Contact c left join fetch c.contactTelDetails t left join fetch c.hobbies h")
-})
-@SqlResultSetMapping(
-		name="contactAuditResult",
-		entities=@EntityResult(entityClass=ContactAudit.class)
-)
-public class ContactAudit implements Auditable<String, Long>, Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class ContactAudit {
 
-	private static final long serialVersionUID = 6672336860898012200L;
-	
 	private Long id;
 	private int version;
 	private String firstName;
@@ -61,10 +56,10 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 
 	// Audit fields
 	private String createdBy;
-	private DateTime createdDate;	
+	private ZonedDateTime createdDate;
 	private String lastModifiedBy;
-	private DateTime lastModifiedDate;
-	
+	private ZonedDateTime lastModifiedDate;
+
 	public ContactAudit() {
 	}
 
@@ -73,8 +68,8 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 		this.lastName = lastName;
 	}
 
-	public ContactAudit(String firstName, String lastName, Date birthDate,
-			Set<Hobby> hobbies, Set<ContactTelDetail> contactTelDetails) {
+	public ContactAudit(String firstName, String lastName, Date birthDate, Set<Hobby> hobbies,
+			Set<ContactTelDetail> contactTelDetails) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
@@ -133,9 +128,7 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 
 	@ManyToMany
 	@NotAudited
-	@JoinTable(name = "contact_hobby_detail", 
-	      joinColumns = @JoinColumn(name = "CONTACT_ID"), 
-	      inverseJoinColumns = @JoinColumn(name = "HOBBY_ID"))
+	@JoinTable(name = "contact_hobby_detail", joinColumns = @JoinColumn(name = "CONTACT_ID"), inverseJoinColumns = @JoinColumn(name = "HOBBY_ID"))
 	public Set<Hobby> getHobbies() {
 		return this.hobbies;
 	}
@@ -144,7 +137,7 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 		this.hobbies = hobbies;
 	}
 
-	@OneToMany(mappedBy = "contact", cascade=CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
 	@NotAudited
 	public Set<ContactTelDetail> getContactTelDetails() {
 		return this.contactTelDetails;
@@ -154,7 +147,7 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 		this.contactTelDetails = contactTelDetails;
 	}
 
-	@Column(name="CREATED_BY")
+	@CreatedBy
 	public String getCreatedBy() {
 		return createdBy;
 	}
@@ -163,34 +156,30 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 		this.createdBy = createdBy;
 	}
 
-	@Column(name="CREATED_DATE")
-	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	//@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	public DateTime getCreatedDate() {
+	@CreatedDate
+	public ZonedDateTime getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(DateTime createdDate) {
+	public void setCreatedDate(ZonedDateTime createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	@Column(name="LAST_MODIFIED_BY")
+	@LastModifiedBy
 	public String getLastModifiedBy() {
 		return lastModifiedBy;
 	}
-	
+
 	public void setLastModifiedBy(String lastModifiedBy) {
 		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	@Column(name="LAST_MODIFIED_DATE")
-	@Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-	//@Type(type="org.joda.time.contrib.hibernate.PersistentDateTime")
-	public DateTime getLastModifiedDate() {
+	@LastModifiedDate
+	public ZonedDateTime getLastModifiedDate() {
 		return lastModifiedDate;
 	}
 
-	public void setLastModifiedDate(DateTime lastModifiedDate) {
+	public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 
@@ -203,11 +192,10 @@ public class ContactAudit implements Auditable<String, Long>, Serializable {
 		}
 	}
 
-	public String toString() {		
-		return "Contact - Id: " + id + "\n, First name: " + firstName 
-				+ "\n, Last name: " + lastName + "\n, Birthday: " + birthDate
-				+ "\n, Create by: " + createdBy + "\n, Create date: " + createdDate
-				+ "\n, Modified by: " + lastModifiedBy + "\n, Modified date: " + lastModifiedDate;
-	}	
+	public String toString() {
+		return "Contact - Id: " + id + "\n, First name: " + firstName + "\n, Last name: " + lastName + "\n, Birthday: "
+				+ birthDate + "\n, Create by: " + createdBy + "\n, Create date: " + createdDate + "\n, Modified by: "
+				+ lastModifiedBy + "\n, Modified date: " + lastModifiedDate;
+	}
 
 }

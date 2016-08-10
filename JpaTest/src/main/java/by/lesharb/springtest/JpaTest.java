@@ -3,8 +3,9 @@ package by.lesharb.springtest;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.context.support.GenericXmlApplicationContext;
-
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import by.lesharb.springtest.config.AppConfig;
 import by.lesharb.springtest.domain.Contact;
 import by.lesharb.springtest.domain.ContactAudit;
 import by.lesharb.springtest.service.ContactAuditService;
@@ -28,9 +29,12 @@ public class JpaTest {
 
 	public static void main(String[] args) {
 
-		GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
-		ctx.load("classpath:app-context.xml");
-		ctx.refresh();
+		AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+
+		// GenericXmlApplicationContext ctx = new
+		// GenericXmlApplicationContext();
+		// ctx.load("classpath:app-context.xml");
+		// ctx.refresh();
 
 		ContactService contactService = ctx.getBean("contactService", ContactService.class);
 
@@ -53,8 +57,7 @@ public class JpaTest {
 		List<ContactAudit> contactsAudit = contactServiceAudit.findAll();
 		listContactsAudit(contactsAudit);
 
-		// Add new contact
-		System.out.println("Add new contact");
+		// Add new contact System.out.println("Add new contact");
 		ContactAudit contact = new ContactAudit();
 		contact.setFirstName("Michael");
 		contact.setLastName("Jackson");
@@ -63,20 +66,18 @@ public class JpaTest {
 		contactsAudit = contactServiceAudit.findAll();
 		listContactsAudit(contactsAudit);
 
-		// Find by id
-		contact = contactServiceAudit.findById(1l);
+		// Find by id contact = contactServiceAudit.findById(1l);
 		System.out.println("");
 		System.out.println("Contact with id 1:" + contact);
 		System.out.println("");
 
-		// Update contact
-		System.out.println("Update contact");
+		// Update contact System.out.println("Update contact");
 		contact.setFirstName("Tom");
 		contactServiceAudit.save(contact);
 		contactsAudit = contactServiceAudit.findAll();
 		listContactsAudit(contactsAudit);
 
-		// Find audit record by revision
+		// Find audit record by revision ContactAudit oldContact =
 		ContactAudit oldContact = contactServiceAudit.findAuditByRevision(1l, 1);
 		System.out.println("");
 		System.out.println("Old Contact with id 1 and rev 1:" + oldContact);
