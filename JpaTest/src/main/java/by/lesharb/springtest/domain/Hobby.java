@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -43,8 +44,7 @@ public class Hobby implements Serializable {
 		this.hobbyId = hobbyId;
 	}
 
-	@ManyToMany
-	@JoinTable(name = "contact_hobby_detail", joinColumns = @JoinColumn(name = "HOBBY_ID"), inverseJoinColumns = @JoinColumn(name = "CONTACT_ID"))
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy="hobbies")
 	public Set<Contact> getContacts() {
 		return this.contacts;
 	}

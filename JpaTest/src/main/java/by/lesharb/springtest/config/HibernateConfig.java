@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -19,28 +21,31 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class HibernateConfig {
 
+	@Autowired	
+	Environment env;
+	
 	@Autowired
 	DataSource dataSource;
 
-	private static Properties hibernateProperties() {
+	private Properties hibernateProperties() {
 		Properties hibernateProperties = new Properties();
 
-		hibernateProperties.setProperty("org.hibernate.envers.audit_table_suffix", "_H");
-		hibernateProperties.setProperty("org.hibernate.envers.revision_field_name", "AUDIT_REVISION");
-		hibernateProperties.setProperty("org.hibernate.envers.revision_type_field_name", "ACTION_TYPE");
+		hibernateProperties.setProperty("org.hibernate.envers.audit_table_suffix", env.getProperty("org.hibernate.envers.audit_table_suffix"));
+		hibernateProperties.setProperty("org.hibernate.envers.revision_field_name", env.getProperty("org.hibernate.envers.revision_field_name"));
+		hibernateProperties.setProperty("org.hibernate.envers.revision_type_field_name", env.getProperty("org.hibernate.envers.revision_type_field_name"));
 		hibernateProperties.setProperty("org.hibernate.envers.audit_strategy",
-				"org.hibernate.envers.strategy.ValidityAuditStrategy");
+				env.getProperty("org.hibernate.envers.audit_strategy"));
 		hibernateProperties.setProperty("org.hibernate.envers.audit_strategy_validity_end_rev_field_name",
-				"AUDIT_REVISION_END");
-		hibernateProperties.setProperty("org.hibernate.envers.audit_strategy_validity_store_revend_timestamp", "true");
+				env.getProperty("org.hibernate.envers.audit_strategy_validity_end_rev_field_name"));
+		hibernateProperties.setProperty("org.hibernate.envers.audit_strategy_validity_store_revend_timestamp", env.getProperty("org.hibernate.envers.audit_strategy_validity_store_revend_timestamp"));
 		hibernateProperties.setProperty("org.hibernate.envers.audit_strategy_validity_revend_timestamp_field_name",
-				"AUDIT_REVISION_END_TS");
+				env.getProperty("org.hibernate.envers.audit_strategy_validity_revend_timestamp_field_name"));
 
-		hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
-		hibernateProperties.setProperty("hibernate.max_fetch_depth", "3");
-		hibernateProperties.setProperty("hibernate.jdbc.fetch_size", "50");
-		hibernateProperties.setProperty("hibernate.jdbc.batch_size", "10");
-		hibernateProperties.setProperty("hibernate.show_sql", "true");
+		hibernateProperties.setProperty("hibernate.dialect", env.getProperty("hibernate.dialect"));
+		hibernateProperties.setProperty("hibernate.max_fetch_depth", env.getProperty("hibernate.max_fetch_depth"));
+		hibernateProperties.setProperty("hibernate.jdbc.fetch_size", env.getProperty("hibernate.jdbc.fetch_size"));
+		hibernateProperties.setProperty("hibernate.jdbc.batch_size", env.getProperty("hibernate.jdbc.batch_size"));
+		hibernateProperties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
 		return hibernateProperties;
 	}
 
@@ -61,7 +66,7 @@ public class HibernateConfig {
 	}
 
 	@Bean
-	@DependsOn("dataSourceInitializer")
+//	@DependsOn("dataSourceInitializer")
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
 		HibernateJpaVendorAdapter vendorAdapter = jpaVendorAdapter();
 

@@ -39,7 +39,7 @@ public class DataSourceConfig {
 	private DatabasePopulator databasePopulator() {
 		final ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 		populator.addScript(H2_SCHEMA_SCRIPT);
-		//populator.addScript(H2_DATA_SCRIPT);
+		populator.addScript(H2_DATA_SCRIPT);
 		return populator;
 	}
 

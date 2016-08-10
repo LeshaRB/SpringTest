@@ -126,9 +126,9 @@ public class ContactAudit {
 		this.birthDate = birthDate;
 	}
 
-	@ManyToMany
 	@NotAudited
-	@JoinTable(name = "contact_hobby_detail", joinColumns = @JoinColumn(name = "CONTACT_ID"), inverseJoinColumns = @JoinColumn(name = "HOBBY_ID"))
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "contact_audit_hobby_detail", joinColumns = @JoinColumn(name = "CONTACT_ID"), inverseJoinColumns = @JoinColumn(name = "HOBBY_ID"))
 	public Set<Hobby> getHobbies() {
 		return this.hobbies;
 	}
@@ -137,8 +137,8 @@ public class ContactAudit {
 		this.hobbies = hobbies;
 	}
 
-	@OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
 	@NotAudited
+	@OneToMany(mappedBy = "contact", cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<ContactTelDetail> getContactTelDetails() {
 		return this.contactTelDetails;
 	}
