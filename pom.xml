@@ -6,7 +6,10 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>JpaTest</module>
+		<module>DataBase</module>
+		<module>Service</module>
+		<module>Config</module>
+		<module>Runner</module>
 	</modules>
 
 	<properties>
@@ -14,6 +17,26 @@
 		<spring.framework.version>4.3.1.RELEASE</spring.framework.version>
 		<hibernate.framework.version>5.1.0.Final</hibernate.framework.version>
 	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>by.lesharb.springtest</groupId>
+				<artifactId>DataBase</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>by.lesharb.springtest</groupId>
+				<artifactId>Config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>by.lesharb.springtest</groupId>
+				<artifactId>Service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<dependencies>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
