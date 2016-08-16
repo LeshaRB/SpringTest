@@ -8,4 +8,20 @@
 	</parent>
 	<artifactId>DataBase</artifactId>
 	<name>DataBase</name>
+
+	<dependencies>
+		<!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.192</version>
+		</dependency>
+			
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-java8 -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernate.framework.version}</version>
+		</dependency>
+	</dependencies>
 </project>
