@@ -3,6 +3,10 @@ package by.lesharb.springtest;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
@@ -13,19 +17,29 @@ import by.lesharb.springtest.service.ContactAuditService;
 import by.lesharb.springtest.service.ContactService;
 
 public class JpaTest {
+	// private static Log log = LogFactory.getLog(JpaTest.class);
+	private static Logger log1 = LoggerFactory.getLogger(JpaTest.class);
 
 	private static void listContactsAudit(List<ContactAudit> contacts) {
-		System.out.println("");
-		System.out.println("Listing contacts without details:");
-		for (ContactAudit contact : contacts)
-			System.out.println(contact);
+		// log.info("");
+		log1.info("");
+		// log.info("Listing contacts without details:");
+		log1.info("Listing contacts without details:");
+		for (ContactAudit contact : contacts) {
+			// log.info(contact);
+			log1.info(contact.toString());
+		}
 	}
 
 	private static void listContacts(List<Contact> contacts) {
-		System.out.println("");
-		System.out.println("Listing contacts without details:");
-		for (Contact contact : contacts)
-			System.out.println(contact);
+		// log.info("");
+		log1.info("");
+		// log.info("Listing contacts without details:");
+		log1.info("Listing contacts without details:");
+		for (Contact contact : contacts) {
+			// log.info(contact);
+			log1.info(contact.toString());
+		}
 	}
 
 	public static void main(String[] args) {
@@ -68,9 +82,12 @@ public class JpaTest {
 		listContactsAudit(contactsAudit);
 
 		// Find by id contact = contactServiceAudit.findById(1l);
-		System.out.println("");
-		System.out.println("Contact with id 1:" + contact);
-		System.out.println("");
+		// log.info("");
+		log1.info("");
+		// log.info("Contact with id 1:" + contact);
+		log1.info("Contact with id 1:" + contact);
+		// log.info("");
+		log1.info("");
 
 		// Update contact System.out.println("Update contact");
 		contact.setFirstName("Tom");
@@ -80,13 +97,19 @@ public class JpaTest {
 
 		// Find audit record by revision ContactAudit oldContact =
 		ContactAudit oldContact = contactServiceAudit.findAuditByRevision(1l, 1);
-		System.out.println("");
-		System.out.println("Old Contact with id 1 and rev 1:" + oldContact);
-		System.out.println("");
+		// log.info("");
+		log1.info("");
+		// log.info("Old Contact with id 1 and rev 1:" + oldContact);
+		log1.info("Old Contact with id 1 and rev 1:" + oldContact);
+		// log.info("");
+		log1.info("");
 		oldContact = contactServiceAudit.findAuditByRevision(1l, 2);
-		System.out.println("");
-		System.out.println("Old Contact with id 1 and rev 2:" + oldContact);
-		System.out.println("");
+		// log.info("");
+		log1.info("");
+		// log.info("Old Contact with id 1 and rev 2:" + oldContact);
+		log1.info("Old Contact with id 1 and rev 2:" + oldContact);
+		// log.info("");
+		log1.info("");
 
 		ctx.close();
 	}
