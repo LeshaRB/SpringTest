@@ -23,11 +23,21 @@
 	<logger name="org.hibernate.type" additivity="false" level="INFO">
 		<appender-ref ref="STDOUT" />
 	</logger>
+	
+<!-- 
+
+We are defining two loggers:
+
+    An user defined logger – Which handles classes logging in the package com.javacodegeeks.examples.logbackexample.beans, has an INFO level and points to the standard output console
+    A ROOT logger – Which handles logging in all of the classes that are not in the package com.javacodegeeks.examples.logbackexample.beans, has a DEBUG level and points to the standard output console
+    
+
 	<logger name="com.javacodegeeks.examples.logbackexample.beans"
 		level="INFO" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-
+ -->
+ 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
