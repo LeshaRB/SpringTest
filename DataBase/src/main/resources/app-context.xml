@@ -52,7 +52,7 @@
 					key="org.hibernate.envers.audit_strategy_validity_store_revend_timestamp">true</prop>
 				<prop
 					key="org.hibernate.envers.audit_strategy_validity_revend_timestamp_field_name">AUDIT_REVISION_END_TS</prop>
-					
+
 				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<prop key="hibernate.max_fetch_depth">3</prop>
 				<prop key="hibernate.jdbc.fetch_size">50</prop>
@@ -62,6 +62,8 @@
 		</property>
 	</bean>
 
+	<!-- <tx:annotation-driven> -->
+	
 	<context:annotation-config />
 	<context:component-scan base-package="by.lesharb.springtest.service.jpa" />
 
